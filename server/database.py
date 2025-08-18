@@ -1,6 +1,7 @@
 import os
-from typing import List, Dict, Any
-from sqlmodel import create_engine, SQLModel, Session, select
+from typing import List, Dict, Any, Tuple
+from datetime import datetime
+from sqlmodel import create_engine, SQLModel, Session, select, func
 from dotenv import load_dotenv
 
 from models import Videos
@@ -53,11 +54,13 @@ def insert_videos_in_db(items: List[Dict[str, Any]]) -> List[Videos]:
         video_kind = item["kind"] if "kind" in item else "unknown"
         snippet = item["snippet"]
         thumbnail_url = snippet.get("thumbnails", {})["default"]["url"] if "thumbnails" in snippet else ""
+        published_at_str = snippet["publishedAt"]
+        published_at = datetime.fromisoformat(published_at_str.replace('Z', '+00:00'))
 
         video = Videos(
             video_id=video_id,
             video_kind=video_kind,
-            published_at=snippet["publishedAt"],
+            published_at=published_at,
             channel_id=snippet["channelId"],
             title=snippet["title"],
             description=snippet["description"],
@@ -85,4 +88,26 @@ def insert_videos_in_db(items: List[Dict[str, Any]]) -> List[Videos]:
                 session.refresh(video)
     
     return new_videos
+
+
+def get_videos_paginated(page: int = 1, page_size: int = 10) -> Tuple[List[Videos], int]:
+    """    
+    Args:
+        page: Page number (1-based)
+        page_size: Number of videos per page 
+    Returns:
+        Tuple of (videos_list, total_count)
+    """
+    with Session(engine) as session:
+        total_count = session.exec(select(func.count(Videos.id))).one()
+        offset = (page - 1) * page_size
+        statement = (
+            select(Videos)
+            .order_by(Videos.published_at.desc())
+            .offset(offset)
+            .limit(page_size)
+        )
+        videos = session.exec(statement).all()
+        
+        return videos, total_count
 

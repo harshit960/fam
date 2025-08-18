@@ -1,15 +1,19 @@
-import os
-from typing import Union
 from fastapi import FastAPI
-from sqlmodel import Session, select
 from dotenv import load_dotenv
+import threading
 
-from database import engine
-from models import Hero
+from youtube import monitor_youtube
 
 load_dotenv()
 
 app = FastAPI()
+
+@app.on_event("startup")
+async def startup_event():
+    """Start the YouTube monitoring when the app starts"""
+    monitoring_thread = threading.Thread(target=monitor_youtube, daemon=True)
+    monitoring_thread.start()
+    print("YouTube monitoring started in background")
 
 @app.get("/")
 def read_root():

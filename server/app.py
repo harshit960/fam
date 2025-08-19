@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Query
 from typing import Dict, Any, List
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import threading
 
@@ -11,6 +12,13 @@ load_dotenv()
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],  
+)
 @app.on_event("startup")
 async def startup_event():
     """Start the YouTube monitoring when the app starts"""

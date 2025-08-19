@@ -1,12 +1,10 @@
 # FAM - Backend Intern Assignment
-
-## What it does
-
 This app continuously monitors YouTube for new videos and stores them in a database for a given query.
+
 
 ## Backend Architecture
 
-**FastAPI** server
+**FastAPI server**
 
 - **Auto-monitors YouTube** - Runs background tasks to fetch new videos every 10 seconds.
 - **Smart API key management** - Handles multiple YouTube API keys with automatic failover
@@ -16,9 +14,9 @@ This app continuously monitors YouTube for new videos and stores them in a datab
 ## Bonus Points 
 
 - ✅ **Multiple API key support** - Automatically switches between API keys when quota is exhausted on one, ensuring uninterrupted monitoring
-- ✅ **Dashboard with filters and sorting** - Built a React frontend to view stored videos with search, filter, and sorting capabilities
+- ✅ **Very minimal dashboard with filters and sorting** - Built a React frontend to view stored videos with search, filter, and sorting capabilities
 
-# Default query used to fetch videos = "Cricket"
+### Default query used to fetch videos = "Cricket"
 
 ## Quick Start
 
@@ -43,8 +41,8 @@ Create a `.env` file in the server directory:
 ```
 PORT=8000
 YT_QUERY=cricket
-WAITING_TIME=10 # Time in seconds to wait between API calls
-YT_API_KEY=api_key_1,api_key_2,... # Your YouTube Data API keys
+WAITING_TIME=10                     # Time in seconds to wait between API calls
+YT_API_KEY=api_key_1,api_key_2,...  # Your YouTube Data API keys
 DATABASE_URL="postgresql+psycopg://username:password@localhost/dbname" 
 ```
 

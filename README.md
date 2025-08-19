@@ -18,6 +18,8 @@ This app continuously monitors YouTube for new videos and stores them in a datab
 - ✅ **Multiple API key support** - Automatically switches between API keys when quota is exhausted on one, ensuring uninterrupted monitoring
 - ✅ **Dashboard with filters and sorting** - Built a React frontend to view stored videos with search, filter, and sorting capabilities
 
+# Default query used to fetch videos = "Cricket"
+
 ## Quick Start
 
 ### Backend Setup

@@ -3,6 +3,8 @@ from typing import Dict, Any, List
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import threading
+import os
+import uvicorn
 
 from youtube import monitor_youtube
 from database import get_videos_paginated
@@ -61,5 +63,10 @@ def get_videos(
             "previous_page": page - 1 if has_previous else None
         }
     }
+
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 

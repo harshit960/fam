@@ -9,6 +9,9 @@ from database import insert_videos_in_db
 
 load_dotenv()
 
+query= os.getenv('YT_QUERY', 'cricket')
+waiting_time = int(os.getenv('WAITING_TIME', 10))
+
 # API Key management
 # Disable key if 403 or 429 error code is raised
 API_KEYS = []
@@ -62,7 +65,7 @@ def fetch_youtube_data():
     
     params = {
         'part': 'snippet',
-        'q': 'cricket',
+        'q': query,
         'order': 'date',
         'key': api_key
     }
@@ -100,7 +103,7 @@ def monitor_youtube():
                     insert_videos_in_db(data["items"])
             except Exception as e:
                 print(f"Error during monitoring loop: {e}")
-            print(f"\nWaiting 10 seconds...")
-            time.sleep(10)
+            print(f"\nWaiting {waiting_time} seconds...")
+            time.sleep(waiting_time)
     except KeyboardInterrupt:
         print("\nMonitoring stopped.")
